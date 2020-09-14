@@ -1,0 +1,24 @@
+{
+  "name": "city_explorer_api",
+  "version": "1.0.0",
+  "description": "Lots of information about any city of your choosing!  The website displays information for a user defined city through aggregation of data via 6 APIs.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paul-leonard/city_explorer_api.git"
+  },
+  "author": "Paul Leonard",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/paul-leonard/city_explorer_api/issues"
+  },
+  "homepage": "https://github.com/paul-leonard/city_explorer_api#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  }
+}
