@@ -19,7 +19,6 @@ const weatherData = require('./data/weather.json');
 // const { response } = require('express');
 
 
-
 //Basic test of home page
 app.get('/', (request, response) => {
   console.log('response body:', response);
@@ -49,15 +48,7 @@ function City(city,locationData) {
   this.formatted_query = locationData[0].display_name;
   this.latitude = locationData[0].lat;
   this.longitude = locationData[0].lon;
-
-  {
-    "search_query": "seattle",
-    "formatted_query": "Seattle, WA, USA",
-    "latitude": "47.606210",
-    "longitude": "-122.332071"
-  }
 }
-
 
 
 app.listen(PORT, ()=> {
