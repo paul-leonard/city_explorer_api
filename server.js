@@ -53,7 +53,7 @@ function City(city,locationData) {
 function handleWeather(request, response) {
   try {
     const weatherData = require('./data/weather.json');
-    // const city = request.query.city;
+    const city = request.query.city;
     const cityForecast = eightDayForecast(city, weatherData);
     response.send(cityForecast);
   }
