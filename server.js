@@ -6,14 +6,12 @@ require('dotenv').config();
 // Application Dependencies
 const express = require('express');
 const cors = require('cors');
+const { response } = require('express');
 
 //Application Setup
 const PORT = process.env.PORT;
 const app = express();
 app.use(cors());
-
-// pull in json data
-const weatherData = require('./data/weather.json');
 
 // not sure why i put this in here, maybe from day 5 notes
 // const { response } = require('express');
@@ -28,6 +26,8 @@ app.get('/', (request, response) => {
 
 // API Routes
 app.get('/location', handleLocation);
+app.get('/weather', handleWeather);
+app.get('*', notFoundHandler);
 
 // Helper Functions
 function handleLocation(request, response) {
@@ -50,6 +50,39 @@ function City(city,locationData) {
   this.longitude = locationData[0].lon;
 }
 
+function handleWeather(request, response) {
+  try {
+    const weatherData = require('./data/weather.json');
+    const city = request.query.city;
+    const cityForecast = eightDayForecast(city, weatherData);
+    response.sent(cityForecast);
+  }
+  catch(error) {
+    console.log('ERROR',error);
+    response.status(500).send('Deep apologies, something has gone wrong.');
+  }
+}
+
+function eightDayForecast(city,weatherData) {
+  let eightForecastOutput = [];
+  for (let i = 0; i < 8; i++) {
+    eightForecastOutput.push(new Forecast(city,weatherData,i));
+  }
+  return eightForecastOutput;
+}
+
+function Forecast(city,weatherData,day) {
+  this.forecast = weatherData.data[day].weather.description;
+  this.time = weatherData.data[day].valid-Date;
+
+  // "forecast": "Mostly cloudy in the morning.",
+  // "time": "Tue Jan 02 2001"
+}
+
+
+function notFoundHandler(request, response) {
+  response.status(404).send('that page does not exist. should we make it?')
+}
 
 app.listen(PORT, ()=> {
   console.log('listening on port: ${PORT}');
