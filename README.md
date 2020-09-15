@@ -54,6 +54,16 @@ Estimate of time needed to complete: 1.0 hours
 
 Start time: 5:15
 
-Finish time: 6:00 not including heroku deploy after pushing and merging this
+Finish time: 6:35
 
-Actual time needed to complete: 0:45
+Actual time needed to complete: 1:20
+
+### Number and name of feature: 3-Return Lat/Long object for city input
+
+Estimate of time needed to complete: 45 minutes
+
+Start time: 6:35
+
+Finish time: 
+
+Actual time needed to complete: 
