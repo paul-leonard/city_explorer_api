@@ -53,6 +53,10 @@ function handleWeather(request, response) {
     const city = request.query.city;
     const cityForecast = multiDayForecast(city, weatherData);
     response.send(cityForecast);
+
+    const cityForecast = weatherData.data.map(new Forecast(city,weatherData,i))    
+
+    response.send(cityForecast);
   }
   catch(error) {
     console.log('ERROR',error);
@@ -61,18 +65,15 @@ function handleWeather(request, response) {
 }
 
 function multiDayForecast(city,weatherData) {
-  let multiForecastOutput = [];
-  for (let i = 0; i < weatherData.data.length; i++) {
-    multiForecastOutput.push(new Forecast(city,weatherData,i));
-  }
-  return multiForecastOutput;
+  return weatherData['data'].map( (value,index) => {
+    return new Forecast(value.weather.description, value.datetime);
+  });
 }
 
-function Forecast(city,weatherData,day) {
-  this.forecast = weatherData.data[day].weather.description;
-  let dateString = weatherData.data[day].datetime;
-  let tempDateObject = new Date(dateString);
-  this.time = tempDateObject.toDateString();
+function Forecast(desc,day) {
+  this.forecast = desc;
+  let dateString = day;
+  this.time = new Date(dateString).toDateString();
 }
 
 function notFoundHandler(request, response) {

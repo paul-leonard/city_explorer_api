@@ -85,3 +85,13 @@ Start time: 10:55
 Finish time: 11:10
 
 Actual time needed to complete: 15 minutes
+
+### Number and name of feature: Lab7 Feature 1 - Refactor weather to use .map
+
+Estimate of time needed to complete: 30 minutes
+
+Start time: 3:40
+
+Finish time: 
+
+Actual time needed to complete: 
