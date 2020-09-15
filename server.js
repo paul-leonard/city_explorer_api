@@ -36,7 +36,7 @@ function handleLocation(request, response) {
   }
   catch (error) {
     console.log('ERROR',error);
-    response.status(500).send('Deep apologies, something has gone wrong.');
+    response.status(500).send('Sorry, something went wrong');
   } 
 }
 
@@ -56,7 +56,7 @@ function handleWeather(request, response) {
   }
   catch(error) {
     console.log('ERROR',error);
-    response.status(500).send('Deep apologies, something has gone wrong.');
+    response.status(500).send('Sorry, something went wrong');
   }
 }
 
@@ -76,7 +76,7 @@ function Forecast(city,weatherData,day) {
 }
 
 function notFoundHandler(request, response) {
-  response.status(404).send('that page does not exist. should we make it?')
+  response.status(404).send('That page does not exist. Should we make it?')
 }
 
 app.listen(PORT, ()=> {

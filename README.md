@@ -18,23 +18,31 @@ City Explorer brings answers to all of these questions and more with one simple 
 1. Create an express server
 1. Deploy to Heroku
 1. Get city of interest from the user using a route
+1. Define routes and actions to take for given routes
+1. Injest data from JSON files
+1. Restructure data appropriately to format expected by client
+1. Protect for mishaps with try/catch and error codes
+
 
 ## Architecture
 This project develops a backend information gathering, management, and aggregation system to provide data to an existing front end interface called City Explorer.  The information is collected across 6 APIs and consolidated using object constructors.  The backend is written in JavaScript using Node.js.  Libraries used in this server include express, dotenv, and cors.
 
 
 ## Change Log
-<!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an examples:
-
-01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource.
--->
-
 09-14-2020 4:50pm - Created repo, populated file structure, set up server.js and supporting files (package.json; lock-package.json; .env).
 
 09-14-2020 6:00pm - Application now has a fully-functional express server, with a GET route for the location resource.
 
+09-14-2020 10:55pm - Weather and date now returns.
+
+09-14-2020 11:05pm - Error codes in place.
+
+
 ## Credits and Collaborations
 - Collaboration with Dominique Augurson
+- [Converting Date String to DATE Object](https://stackoverflow.com/questions/5619202/converting-a-string-to-a-date-in-javascript/5619263)
+- [Method to Create Date String in Format Desired](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toDateString)
+
 
 ## Time Log
 
@@ -64,6 +72,16 @@ Estimate of time needed to complete: 45 minutes
 
 Start time: 6:35
 
-Finish time: 
+Finish time: 10:55 with probably an hour break
 
-Actual time needed to complete: 
+Actual time needed to complete: 3 hours and 20 minutes
+
+### Number and name of feature: 4-Return Lat/Long object for city input
+
+Estimate of time needed to complete: 30 minutes
+
+Start time: 10:55
+
+Finish time: 11:10
+
+Actual time needed to complete: 15 minutes
