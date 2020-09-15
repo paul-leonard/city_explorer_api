@@ -10,7 +10,7 @@ Lots of information about any city of your choosing!  The website displays infor
 ## Overview
 When traveling to a new city, or waking up in your home town, there is so much information you need for the day!  What's the weather going to be like?  Do you need a coat or umbrella?  What time do you need to get out of work to catch the new flick at the theatre?  Have any dinner plan ideas?
 
-City Explorer brings answers to all of these questions and more with one simple stop!  Explore your or any other city just by entering the name and clicking Go!
+City Explorer brings answers to all of these questions and more with one simple stop!  Explore your or any other city just by entering the name and clicking Explore!
 
 ## Getting Started
 1. Create a new repo on GitHub
@@ -31,7 +31,7 @@ This project develops a backend information gathering, management, and aggregati
 
 09-14-2020 4:50pm - Created repo, populated file structure, set up server.js and supporting files (package.json; lock-package.json; .env).
 
-Application now has a fully-functional express server, with a GET route for the location resource.
+09-14-2020 6:00pm - Application now has a fully-functional express server, with a GET route for the location resource.
 
 ## Credits and Collaborations
 - Collaboration with Dominique Augurson
@@ -47,3 +47,13 @@ Start time: 3:15
 Finish time: 4:50 not including heroku deploy after pushing and merging this
 
 Actual time needed to complete: 1:35
+
+### Number and name of feature: 2-Return Lat/Long object for city input
+
+Estimate of time needed to complete: 1.0 hours
+
+Start time: 5:15
+
+Finish time: 6:00 not including heroku deploy after pushing and merging this
+
+Actual time needed to complete: 0:45
