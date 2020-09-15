@@ -51,10 +51,8 @@ function handleWeather(request, response) {
   try {
     const weatherData = require('./data/weather.json');
     const city = request.query.city;
-    const cityForecast = multiDayForecast(city, weatherData);
-    response.send(cityForecast);
 
-    const cityForecast = weatherData.data.map(new Forecast(city,weatherData,i))    
+    const cityForecast = multiDayForecast(city, weatherData);
 
     response.send(cityForecast);
   }
