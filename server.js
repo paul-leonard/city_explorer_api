@@ -55,7 +55,7 @@ function handleWeather(request, response) {
     const weatherData = require('./data/weather.json');
     // const city = request.query.city;
     const cityForecast = eightDayForecast(city, weatherData);
-    response.sent(cityForecast);
+    response.send(cityForecast);
   }
   catch(error) {
     console.log('ERROR',error);
