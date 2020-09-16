@@ -27,7 +27,6 @@ app.get('*', notFoundHandler);
 
 // Helper Functions
 function handleLocation(request, response) {
-  // try {
     let city = request.query.city;
     let key = process.env.GEOCODE_API_KEY;
 
@@ -49,33 +48,31 @@ function City(city,locationData) {
   this.formatted_query = locationData.display_name;
   this.latitude = locationData.lat;
   this.longitude = locationData.lon;
-
-  // example response format:
-  // {
-  //   "search_query": "seattle",
-  //   "formatted_query": "Seattle, WA, USA",
-  //   "latitude": "47.606210",
-  //   "longitude": "-122.332071"
-  // }
 };
 
 function handleWeather(request, response) {
-  try {
-    const weatherData = require('./data/weather.json');
-    const city = request.query.city;
+  let city = request.query.city;
+  let lat = request.query.latitude;
+  let long = request.query.longitude;
+  let key = process.env.WEATHER_API_KEY;
 
-    const cityForecast = multiDayForecast(city, weatherData);
+  let url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${long}&days=8&key=${key}`;
 
-    response.send(cityForecast);
-  }
-  catch(error) {
-    console.log('ERROR',error);
-    response.status(500).send('Sorry, something went wrong');
-  }
+  superagent.get(url)
+    .then(incomingWeatherData => {
+      // can use json parsing to make diving into the response easier
+      // response.json({data: incomingWeatherData});
+      let weatherData = incomingWeatherData.body.data;
+      const cityForecast = multiDayForecast(weatherData);
+      response.send(cityForecast);
+    })
+    .catch( (error) => {
+      response.status(500).send('Sorry, something went wrong');
+    })
 }
 
-function multiDayForecast(city,weatherData) {
-  return weatherData['data'].map( (value,index) => {
+function multiDayForecast(weatherData) {
+  return weatherData.map( (value) => {
     return new Forecast(value.weather.description, value.datetime);
   });
 }

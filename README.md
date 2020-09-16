@@ -39,11 +39,14 @@ This project develops a backend information gathering, management, and aggregati
 
 **1.1.0** 09-15-2020 4:45pm - Refactored weather handler to use .map.
 
+**1.2.0** 09-15-2020 6:15pm - Connect to real location API
+
 
 ## Credits and Collaborations
 - Collaboration with Dominique Augurson
 - [Converting Date String to DATE Object](https://stackoverflow.com/questions/5619202/converting-a-string-to-a-date-in-javascript/5619263)
 - [Method to Create Date String in Format Desired](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toDateString)
+- [How to refer to an object's parameter without dot notation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects)
 
 
 ## Time Log
@@ -98,12 +101,23 @@ Finish time: 4:48
 
 Actual time needed to complete: 1:08
 
-### Number and name of feature: Lab7 Feature 1 - Refactor weather to use .map
+### Number and name of feature: Lab7 Feature 2 - Connect to real location API
 
 Estimate of time needed to complete: 1.5 hours
 
 Start time: 5:00
 
+Finish time: 6:16 with 15 minute break
+
+Actual time needed to complete: 1 hour and 1 minute
+
+### Number and name of feature: Lab7 Feature 3 - Connect to real weather API
+
+Estimate of time needed to complete: 1 hour
+
+Start time: 6:50
+Breaks:  10 minutes; 1-2 hour break; 
 Finish time: 
 
-Actual time needed to complete:
+Actual time needed to complete: 
+
