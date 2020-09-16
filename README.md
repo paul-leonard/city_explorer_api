@@ -41,6 +41,10 @@ This project develops a backend information gathering, management, and aggregati
 
 **1.2.0** 09-15-2020 6:15pm - Connect to real location API
 
+**1.3.0**  09-15-2020 x:xxpm - Connect real weather API
+
+**2.0.0**  09-15-2020 1:50am - Added trail, location, weather API to provide real data
+
 
 ## Credits and Collaborations
 - Collaboration with Dominique Augurson
@@ -123,10 +127,10 @@ Actual time needed to complete: about 2 hours
 
 ## Number and name of feature: Lab7 Feature 4 - Connect to trails API
 
-Estimate of time needed to complete: 
+Estimate of time needed to complete: 1 hour
 
-Start time:
+Start time:  12:55
 
-Finish time: 
+Finish time: 1:48 plus hopefully only ten minutes to deploy to heroku and test
 
-Actual time needed to complete: 
+Actual time needed to complete: 1:05

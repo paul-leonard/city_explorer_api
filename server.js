@@ -23,6 +23,7 @@ app.get('/', (request, response) => {
 // API Routes
 app.get(`/location`, handleLocation);
 app.get(`/weather`, handleWeather);
+app.get('/trails', handleTrails);
 app.get('*', notFoundHandler);
 
 // Helper Functions
@@ -30,7 +31,7 @@ function handleLocation(request, response) {
     let city = request.query.city;
     let key = process.env.GEOCODE_API_KEY;
 
-    let url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&limit=1&format=json`
+    let url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&limit=1&format=json`;
 
     superagent.get(url)
       .then(incomingLocationData => {
@@ -51,7 +52,6 @@ function City(city,locationData) {
 };
 
 function handleWeather(request, response) {
-  let city = request.query.city;
   let lat = request.query.latitude;
   let long = request.query.longitude;
   let key = process.env.WEATHER_API_KEY;
@@ -82,6 +82,37 @@ function Forecast(desc,day) {
   let dateString = day;
   this.time = new Date(dateString).toDateString();
 }
+
+function handleTrails(request, response) {
+  let lat = request.query.latitude;
+  let long = request.query.longitude;  
+  let key = process.env.TRAIL_API_KEY;
+
+  let url = `https://www.hikingproject.com/data/get-trails?lat=${lat}&lon=${long}&maxDistance=60&key=${key}&sort=quality`;
+
+  superagent.get(url)
+    .then(incomingTrailsData => {
+      let trailsData = incomingTrailsData.body.trails;   
+      const allTrailData = trailsData.map( (value) => new Trail(value));
+      response.send(allTrailData);
+    })
+    .catch( (error) => {
+      response.status(500).send('Sorry, something went wrong');
+    });
+}
+
+function Trail(trailData) {
+this.name = trailData.name;
+this.location = trailData.location;
+this.length = trailData.length;
+this.stars = trailData.stars;
+this.star_votes = trailData.starVotes;
+this.summary = trailData.summary;
+this.trail_url = trailData.url;
+this.conditions = trailData.conditonDetails;
+this.condition_date = trailData.conditionDate.slice(0,10);
+this.condition_time = trailData.conditionDate.slice(11,19);
+};
 
 function notFoundHandler(request, response) {
   response.status(404).send('That page does not exist. Should we make it?')
