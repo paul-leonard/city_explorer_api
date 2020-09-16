@@ -23,6 +23,7 @@ app.get('/', (request, response) => {
 // API Routes
 app.get(`/location`, handleLocation);
 app.get(`/weather`, handleWeather);
+app.get('/trails', handleTrails);
 app.get('*', notFoundHandler);
 
 // Helper Functions
@@ -82,6 +83,60 @@ function Forecast(desc,day) {
   let dateString = day;
   this.time = new Date(dateString).toDateString();
 }
+
+
+
+function handleTrails(request, response) {
+  // is this the right query to send from???
+  let city = request.query.city;
+  let key = process.env.TRAIL_API_KEY;
+
+  // define new url we need using api documentation
+  let url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&limit=1&format=json`
+
+  superagent.get(url)
+    .then(incomingTrailsData => {
+      // whats the right major step?
+      let trailsData = incomingTrailsData.body[0];
+      const allTrailData = trailsData.map( (value) => new Trail(value));
+      response.send(allTrailData);
+    })
+    .catch( (error) => {
+      response.status(500).send('Sorry, something went wrong');
+    });
+}
+
+function Trail(trailData) {
+// previous constructor example data inputs
+  // this.search_query = city;
+// this.formatted_query = locationData.display_name;
+// this.latitude = locationData.lat;
+// this.longitude = locationData.lon;
+
+//  need to give the constructor the right data
+this.name = ;
+this.location = ;
+this.length = ;
+this.stars = ;
+this.star_votes = ;
+this.summary = ;
+this.trail_url = ;
+this.conditions = ;
+this.condition_date = ;
+this.condition_time = ;
+
+// desired data outputs from this constructor
+// "name": "Rattlesnake Ledge",
+// "location": "Riverbend, Washington",
+// "length": "4.3",
+// "stars": "4.4",
+// "star_votes": "84",
+// "summary": "An extremely popular out-and-back hike to the viewpoint on Rattlesnake Ledge.",
+// "trail_url": "https://www.hikingproject.com/trail/7021679/rattlesnake-ledge",
+// "conditions": "Dry: The trail is clearly marked and well maintained.",
+// "condition_date": "2018-07-21",
+// "condition_time": "0:00:00 "
+};
 
 function notFoundHandler(request, response) {
   response.status(404).send('That page does not exist. Should we make it?')

@@ -123,9 +123,9 @@ Actual time needed to complete: about 2 hours
 
 ## Number and name of feature: Lab7 Feature 4 - Connect to trails API
 
-Estimate of time needed to complete: 
+Estimate of time needed to complete: 1 hour
 
-Start time:
+Start time:  12:55
 
 Finish time: 
 
