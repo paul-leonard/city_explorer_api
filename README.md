@@ -117,7 +117,16 @@ Estimate of time needed to complete: 1 hour
 
 Start time: 6:50
 Breaks:  10 minutes; 1-2 hour break; 
+Finish time: 10:40
+
+Actual time needed to complete: about 2 hours
+
+## Number and name of feature: Lab7 Feature 4 - Connect to trails API
+
+Estimate of time needed to complete: 
+
+Start time:
+
 Finish time: 
 
 Actual time needed to complete: 
-
