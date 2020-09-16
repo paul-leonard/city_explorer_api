@@ -31,7 +31,7 @@ function handleLocation(request, response) {
     let city = request.query.city;
     let key = process.env.GEOCODE_API_KEY;
 
-    let url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&limit=1&format=json`
+    let url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&limit=1&format=json`;
 
     superagent.get(url)
       .then(incomingLocationData => {
@@ -52,7 +52,6 @@ function City(city,locationData) {
 };
 
 function handleWeather(request, response) {
-  let city = request.query.city;
   let lat = request.query.latitude;
   let long = request.query.longitude;
   let key = process.env.WEATHER_API_KEY;
@@ -84,20 +83,16 @@ function Forecast(desc,day) {
   this.time = new Date(dateString).toDateString();
 }
 
-
-
 function handleTrails(request, response) {
-  // is this the right query to send from???
-  let city = request.query.city;
+  let lat = request.query.latitude;
+  let long = request.query.longitude;  
   let key = process.env.TRAIL_API_KEY;
 
-  // define new url we need using api documentation
-  let url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&limit=1&format=json`
+  let url = `https://www.hikingproject.com/data/get-trails?lat=${lat}&lon=${long}&maxDistance=60&key=${key}&sort=quality`;
 
   superagent.get(url)
     .then(incomingTrailsData => {
-      // whats the right major step?
-      let trailsData = incomingTrailsData.body[0];
+      let trailsData = incomingTrailsData.body.trails;   
       const allTrailData = trailsData.map( (value) => new Trail(value));
       response.send(allTrailData);
     })
@@ -107,35 +102,16 @@ function handleTrails(request, response) {
 }
 
 function Trail(trailData) {
-// previous constructor example data inputs
-  // this.search_query = city;
-// this.formatted_query = locationData.display_name;
-// this.latitude = locationData.lat;
-// this.longitude = locationData.lon;
-
-//  need to give the constructor the right data
-this.name = ;
-this.location = ;
-this.length = ;
-this.stars = ;
-this.star_votes = ;
-this.summary = ;
-this.trail_url = ;
-this.conditions = ;
-this.condition_date = ;
-this.condition_time = ;
-
-// desired data outputs from this constructor
-// "name": "Rattlesnake Ledge",
-// "location": "Riverbend, Washington",
-// "length": "4.3",
-// "stars": "4.4",
-// "star_votes": "84",
-// "summary": "An extremely popular out-and-back hike to the viewpoint on Rattlesnake Ledge.",
-// "trail_url": "https://www.hikingproject.com/trail/7021679/rattlesnake-ledge",
-// "conditions": "Dry: The trail is clearly marked and well maintained.",
-// "condition_date": "2018-07-21",
-// "condition_time": "0:00:00 "
+this.name = trailData.name;
+this.location = trailData.location;
+this.length = trailData.length;
+this.stars = trailData.stars;
+this.star_votes = trailData.starVotes;
+this.summary = trailData.summary;
+this.trail_url = trailData.url;
+this.conditions = trailData.conditonDetails;
+this.condition_date = trailData.conditionDate.slice(0,10);
+this.condition_time = trailData.conditionDate.slice(11,19);
 };
 
 function notFoundHandler(request, response) {
