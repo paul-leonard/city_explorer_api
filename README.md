@@ -5,7 +5,7 @@ Lots of information about any city of your choosing!  The website displays infor
 # City Explorer
 
 **Author**: Paul Leonard
-**Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
+**Version**: 1.1.0 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
 When traveling to a new city, or waking up in your home town, there is so much information you need for the day!  What's the weather going to be like?  Do you need a coat or umbrella?  What time do you need to get out of work to catch the new flick at the theatre?  Have any dinner plan ideas?
@@ -36,6 +36,8 @@ This project develops a backend information gathering, management, and aggregati
 09-14-2020 10:55pm - Weather and date now returns.
 
 09-14-2020 11:05pm - Error codes in place.
+
+**1.1.0** 09-15-2020 4:45pm - Refactored weather handler to use .map.
 
 
 ## Credits and Collaborations
@@ -92,6 +94,16 @@ Estimate of time needed to complete: 30 minutes
 
 Start time: 3:40
 
+Finish time: 4:48
+
+Actual time needed to complete: 1:08
+
+### Number and name of feature: Lab7 Feature 1 - Refactor weather to use .map
+
+Estimate of time needed to complete: 1.5 hours
+
+Start time: 5:00
+
 Finish time: 
 
-Actual time needed to complete: 
+Actual time needed to complete:
