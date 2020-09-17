@@ -45,6 +45,8 @@ This project develops a backend information gathering, management, and aggregati
 
 **2.0.0**  09-15-2020 1:50am - Added trail, location, weather API to provide real data
 
+**2.1.0**  09-16-2020 12:08am - Added SQL server support and table
+
 
 ## Credits and Collaborations
 - Collaboration with Dominique Augurson
@@ -134,3 +136,14 @@ Start time:  12:55
 Finish time: 1:48 plus hopefully only ten minutes to deploy to heroku and test
 
 Actual time needed to complete: 1:05
+
+
+## Number and name of feature: Lab8 Feature 1 - Set up repo for SQL tables and make one
+
+Estimate of time needed to complete: 1 hour
+
+Start time:  10:40
+
+Finish time: 12:10
+
+Actual time needed to complete: 1:30

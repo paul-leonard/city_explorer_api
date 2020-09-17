@@ -7,10 +7,15 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const superagent = require('superagent');
+const pg = require('pg');
 
 //Application Setup - assign file constants
 const PORT = process.env.PORT;
 const app = express();
+const client = new pg.Client(process.env.DATABASE_URL);
+client.on('error', (err) => console.error(err));
+// Thanks to Chance for the error log above to help with troubleshooting
+
 
 // set up middleware - for global thigns happening in your app
 app.use(cors());
@@ -118,6 +123,13 @@ function notFoundHandler(request, response) {
   response.status(404).send('That page does not exist. Should we make it?')
 }
 
-app.listen(PORT, ()=> {
-  console.log(`listening on port: ${PORT}`);
-  });
+function startServer() {
+  app.listen(PORT, ()=> {
+    console.log(`listening on port: ${PORT}`);
+    });
+}
+
+client.connect()
+  .then(startServer)
+  .catch(e => console.log(e));
+
