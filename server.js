@@ -8,6 +8,7 @@ const express = require('express');
 const cors = require('cors');
 const superagent = require('superagent');
 const pg = require('pg');
+const { response } = require('express');
 
 //Application Setup - assign file constants
 const PORT = process.env.PORT;
@@ -33,20 +34,65 @@ app.get('*', notFoundHandler);
 
 // Helper Functions
 function handleLocation(request, response) {
-    let city = request.query.city;
-    let key = process.env.GEOCODE_API_KEY;
+  let city = request.query.city;
+  let key = process.env.GEOCODE_API_KEY;
+  checkLocationDatabase(request,response)
+    .then(incomingFromSQL => {
+      //if its good data, pass it to client
+      //HOW TAKE IN AND DECIDE GOOD OR BAD?  THEN SIMPLE IF/ELSE STATEMENT? ????????
+      
+      // if it is an error and no data, pass it to the api
+      //HOW TAKE IN AND DECIDE GOOD OR BAD?  THEN SIMPLE IF/ELSE STATEMENT? ????????
 
-    let url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}&limit=1&format=json`;
+        let url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}limit=1&format=json`;
+    
+        superagent.get(url)
+          .then(incomingLocationData => {
+            let locationData = incomingLocationData.body[0];
+            const cityData = new City(city, locationData);
+            addToLocationDatabase(cityData);
+            response.send(cityData);
+          })
+          .catch( (error) => {
+            response.status(500).send('Sorry, something went wrong');
+          });
+    })
+    .catch(e => {
+      throw new Error(e.message)
+    }
+}
 
-    superagent.get(url)
-      .then(incomingLocationData => {
-        let locationData = incomingLocationData.body[0];
-        const cityData = new City(city, locationData);
-        response.send(cityData);
-      })
-      .catch( (error) => {
-        response.status(500).send('Sorry, something went wrong');
-      });
+// do I use req, res here if I'm calling from within handleLocation function?
+function checkLocationDatabase(req, res) {
+  // run a select from the locations table
+  let targetSearchQuery = req.query.city;
+  const SQL = 'SELECT * FROM locations WHERE search_query ${targetSearchQuery}';
+  // get the results
+  client.query(SQL)
+    .then(results => {
+      // if results are good, send them back
+      if (results.rowCount >= 1) {
+        // once connected, use the next line to see what SQL returns raw
+        // res.status(200).json(results.rows);
+        // for final code, run the results through the constructor to make good data
+        let thisCity = new CityFromSQL(search_query,formatted_query,latitude,longitude);
+        res.send(thisCity);
+      } else {
+      // if no results, send back not found message
+        throw new Error('No Results Found')
+      }
+    })
+    .catch(e => {
+      throw new Error(e.message)
+    });
+  // had put below response in to test connectivity... but it didn't work.
+  // actually... turns out it did respond with the message... but also a warning about unhandled promise rejection
+  // will get TA help tomorrow to get it all connected
+  // res.status(200).json({ message: 'ok' })
+}
+
+function addToLocationDatabase(cityObject) {
+  //add new search_query AND its object to database
 }
 
 function City(city,locationData) {
@@ -54,6 +100,13 @@ function City(city,locationData) {
   this.formatted_query = locationData.display_name;
   this.latitude = locationData.lat;
   this.longitude = locationData.lon;
+};
+
+function CityFromSQL(search_query,formatted_query,latitude,longitude) {
+  this.search_query = search_query;
+  this.formatted_query = formatted_query;
+  this.latitude = latitude;
+  this.longitude = longitude;
 };
 
 function handleWeather(request, response) {

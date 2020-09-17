@@ -147,3 +147,13 @@ Start time:  10:40
 Finish time: 12:10
 
 Actual time needed to complete: 1:30
+
+## Number and name of feature: Lab8 Feature 2 - check DB for city and add city to DB
+
+Estimate of time needed to complete: 1.5 hours
+
+Start time:  12:10
+
+Finish time: 1:05
+
+Actual time needed to complete: 55 minutes so far...
