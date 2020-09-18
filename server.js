@@ -40,13 +40,12 @@ function handleLocation(request, response) {
   // run a select from the locations table to see if we have this city already stored
   const searchSQL = 'SELECT * FROM locations WHERE search_query=$1';
   const safeSearchCityValues = [city];
+  console.log(`searching the database for a matching search string of: `,city);
 
   // get the results
   client.query(searchSQL,safeSearchCityValues)
     .then(incomingFromSQL => {
-      // once connected, use the next line to see what SQL returns raw
-      // res.status(200).json(results.rows);
-      // for final code, run the results through the constructor to make good data
+      console.log(`The data that was pulled from the database was: `, safeSearchCityValues);
 
       //if results are good data, pass them to client
       if(incomingFromSQL.rowCount >= 1){
