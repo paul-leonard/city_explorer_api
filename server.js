@@ -17,7 +17,6 @@ const client = new pg.Client(process.env.DATABASE_URL);
 client.on('error', (err) => console.error(err));
 // Thanks to Chance for the error log above to help with troubleshooting
 
-
 // set up middleware - for global thigns happening in your app
 app.use(cors());
 
@@ -32,10 +31,7 @@ app.get(`/weather`, handleWeather);
 app.get('/trails', handleTrails);
 app.get('*', notFoundHandler);
 
-
-
-
-// Helper Functions  ---------------------------------  Helper Functions  --------------------------------- 
+// Helper Functions  ----------------------  Helper Functions  ---------------------- 
 
 function handleLocation(request, response) {
   // what city is the user looking for?
@@ -55,7 +51,7 @@ function handleLocation(request, response) {
       //if results are good data, pass them to client
       if(incomingFromSQL.rowCount){
         const chosenCityFromDB = incomingFromSQL.rows[0];
-        let thisCity = new CityFromSQL(chosenCityFromDB.search_query,chosenCityFromDB.formatted_query,chosenCityFromDB.latitude,chosenCityFromDB.longitude);
+        let thisCity = new CityFromSQL(chosenCityFromDB);
         console.log('found the city in the database');
         console.log(`this city results object: `, thisCity);
         response.status(200).send(thisCity);
@@ -63,7 +59,6 @@ function handleLocation(request, response) {
       
       // if there is no data in the DB for this city, go get the info from the API
       console.log('did not find city in DB - going to the API')
-
 
       // had put below response in to test connectivity... but it didn't work. ....actually
       // actually... turns out it did respond with the message... but also a warning  aboutunhandled   promise rejection
@@ -96,10 +91,6 @@ function handleLocation(request, response) {
     });
 }
 
-
-
-
-
   
 function addToLocationDatabase(cityObject) {
   //add new search_query AND its object to database
@@ -116,12 +107,21 @@ function City(city,locationData) {
   this.longitude = locationData.lon;
 };
 
-function CityFromSQL(search_query,formatted_query,latitude,longitude) {
-  this.search_query = search_query;
-  this.formatted_query = formatted_query;
-  this.latitude = latitude;
-  this.longitude = longitude;
+// if data from DB is an array
+function CityFromSQL(arrayFromDB) {
+  this.search_query = arrayFromDB[1];
+  this.formatted_query = arrayFromDB[2];
+  this.latitude = arrayFromDB[3];
+  this.longitude = arrayFromDB[4];
 };
+
+// if data from DB is object
+// function CityFromSQL(search_query,formatted_query,latitude,longitude) {
+//   this.search_query = search_query;
+//   this.formatted_query = formatted_query;
+//   this.latitude = latitude;
+//   this.longitude = longitude;
+// };
 
 function handleWeather(request, response) {
   let lat = request.query.latitude;
