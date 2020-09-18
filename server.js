@@ -32,43 +32,21 @@ app.get(`/weather`, handleWeather);
 app.get('/trails', handleTrails);
 app.get('*', notFoundHandler);
 
-// Helper Functions
+
+
+
+// Helper Functions  ---------------------------------  Helper Functions  --------------------------------- 
+
 function handleLocation(request, response) {
+  // what city is the user looking for?
   let city = request.query.city;
-  let key = process.env.GEOCODE_API_KEY;
-  checkLocationDatabase(request,response)
-    .then(incomingFromSQL => {
-      //if its good data, pass it to client
-      //HOW TAKE IN AND DECIDE GOOD OR BAD?  THEN SIMPLE IF/ELSE STATEMENT? ????????
-      
-      // if it is an error and no data, pass it to the api
-      //HOW TAKE IN AND DECIDE GOOD OR BAD?  THEN SIMPLE IF/ELSE STATEMENT? ????????
-
-        let url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}limit=1&format=json`;
     
-        superagent.get(url)
-          .then(incomingLocationData => {
-            let locationData = incomingLocationData.body[0];
-            const cityData = new City(city, locationData);
-            addToLocationDatabase(cityData);
-            response.send(cityData);
-          })
-          .catch( (error) => {
-            response.status(500).send('Sorry, something went wrong');
-          });
-    })
-    .catch(e => {
-      throw new Error(e.message)
-    }
-}
+  // run a select from the locations table to see if we have this city already stored
+  const searchSQL = 'SELECT * FROM locations WHERE search_query=$1';
+  const safeSearchCityValues = [city];
 
-// do I use req, res here if I'm calling from within handleLocation function?
-function checkLocationDatabase(req, res) {
-  // run a select from the locations table
-  let targetSearchQuery = req.query.city;
-  const SQL = 'SELECT * FROM locations WHERE search_query ${targetSearchQuery}';
   // get the results
-  client.query(SQL)
+  client.query(searchSQL,safeSearchCityValues)
     .then(results => {
       // if results are good, send them back
       if (results.rowCount >= 1) {
@@ -76,23 +54,80 @@ function checkLocationDatabase(req, res) {
         // res.status(200).json(results.rows);
         // for final code, run the results through the constructor to make good data
         let thisCity = new CityFromSQL(search_query,formatted_query,latitude,longitude);
+        console.log(`this city results object: `, thisCity);
         res.send(thisCity);
       } else {
       // if no results, send back not found message
         throw new Error('No Results Found')
+
+
+
+
+
+
+
       }
     })
     .catch(e => {
       throw new Error(e.message)
     });
-  // had put below response in to test connectivity... but it didn't work.
-  // actually... turns out it did respond with the message... but also a warning about unhandled promise rejection
+  // had put below response in to test connectivity... but it didn't work. ....actually
+  // actually... turns out it did respond with the message... but also a warning aboutunhandled promise rejection
   // will get TA help tomorrow to get it all connected
   // res.status(200).json({ message: 'ok' })
+
+  //and the function that has been disassembled and put in line ENDS here.
+  .then(incomingFromSQL => {
+    //if its good data, pass it to client
+    if(incomingFromSQL.rowCount){
+      const chosenCityFromDB = incomingFromSQL.rows[0];
+      console.log('found the city in the database');
+      response.status(200).send(chosenCityFromDB);
+    }
+    // tricky if/else.... write more comments/lesson
+      // if it is an error and no data, pass it to the api
+      console.log('did not find city in DB - going to the API')
+
+      // This version of the code changes out our long written out url for two reasons.  First, security.  By using superagent to construct the url (with .get(url) and .query  (queryObject)), superagent checks the query strings for malicious code.  Second, it makes it easier to read the url and see the search parameters.
+      // old way:  let url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}limit=1&format=json`;
+
+      let url = `https://us1.locationiq.com/v1/search.php`
+      const queryObject = {
+        key: process.env.GEOCODE_API_KEY,
+        city,
+        format: 'JSON',
+        limit: 1
+      }
+
+      superagent
+      .get(url)
+      .query(queryObject)
+        .then(incomingLocationData => {
+          let locationData = incomingLocationData.body[0];
+          const cityData = new City(city, locationData);
+          addToLocationDatabase(cityData);
+          response.send(cityData);
+        })
+        .catch( (error) => {
+          response.status(500).send('Sorry, something went wrong');
+        });
+  })
+  .catch(e => {
+    throw new Error(e.message)
+  })
 }
 
+
+
+
+
+  
 function addToLocationDatabase(cityObject) {
   //add new search_query AND its object to database
+  const storeInDBsql = `INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4);`;
+  const safeInputCityValues = [cityObject.city, cityObject.formatted_query, cityObject.latitude, cityObject.longitude];
+  console.log(`safe values for location: `, safeInputCityValues);
+  client.query(sql, safeValues);
 }
 
 function City(city,locationData) {
