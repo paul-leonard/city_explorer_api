@@ -116,6 +116,39 @@ function CityFromSQL(object) {
 function handleWeather(request, response) {
   let lat = request.query.latitude;
   let long = request.query.longitude;
+  console.log(`----------  START OF HANDLE WEATHER FUNCTION ----------`);
+
+  // run a select from the locations table to see if we have this city already stored
+  const searchSQL = 'SELECT * FROM weather WHERE search_query=$1';
+  const safeSearchCityValues = [lat, long];
+  console.log(`searching the database for a matching safe search string of: `,city);
+
+  // get the results
+
+  // if rows in DB
+    //if current
+      //send back
+    //else
+      //delete row
+      // call API function
+  // else
+    //call api function
+  
+
+  // define api function
+
+
+
+
+
+
+
+
+
+
+
+
+
   let key = process.env.WEATHER_API_KEY;
 
   let url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${long}&days=8&key=${key}`;

@@ -169,3 +169,18 @@ Start time:  2:11
 Finish time: 2:30pm
 
 Actual time needed to complete: 20 minutes
+
+## Number and name of feature: Lab8+ Feature 1:
+1. when a user searches for a location, check to see if the weather for that location is in the database. 
+2. If it is, check to see if it is more than one day old. 
+3. If it is, dump it and get new weather information.
+4. if the weather information is in the database but it is less than one day old, just send that information to the user
+5. if the weather information is not in the database, add it and send it to the user
+
+Estimate of time needed to complete: 1 hour and 30 minutes
+
+Start time:  2:45 ; 2:30
+
+Finish time: 3:05 ; 
+
+Actual time needed to complete: 
