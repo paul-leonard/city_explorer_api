@@ -36,7 +36,7 @@ app.get('*', notFoundHandler);
 function handleLocation(request, response) {
   // what city is the user looking for?
   let city = request.query.city;
-    
+  console.log(`----------  START OF HANDLE LOCATION FUNCTION ----------`);
   // run a select from the locations table to see if we have this city already stored
   const searchSQL = 'SELECT * FROM locations WHERE search_query=$1';
   const safeSearchCityValues = [city];
@@ -49,12 +49,11 @@ function handleLocation(request, response) {
       // for final code, run the results through the constructor to make good data
 
       //if results are good data, pass them to client
-      if(incomingFromSQL.rowCount){
+      if(incomingFromSQL.rowCount >= 1){
         console.log(`city found in database... pulling from database`);
         const chosenCityFromDB = incomingFromSQL.rows[0];
         let thisCity = new CityFromSQL(chosenCityFromDB);
-        console.log('found the city in the database');
-        console.log(`this city results object: `, thisCity);
+        console.log(`this city results object from database: `, thisCity);
         response.status(200).send(thisCity);
       }    // tricky if/else. Morgan suggested, similar to reading last night. If true, sends response and exits the whole function. So nothing below it would be run,        meaning an else statement and block is not needed.
       
@@ -99,9 +98,8 @@ function addToLocationDatabase(cityObject) {
   const storeInDBsql = `INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4);`;
   const safeInputCityValues = [cityObject.search_query, cityObject.formatted_query, cityObject.latitude, cityObject.longitude];
   console.log(`safe values for location: `, safeInputCityValues);
-  console.log(`successful to here 2063`);
-  client.query(sql, safeValues);  // the code is breaking on this line
-  console.log(`successful to here 2065`)
+  client.query(storeInDBsql, safeInputCityValues);  // the code is breaking on this line
+  console.log(`got to line that follows the attempt to store values in the database`)
 }
 
 function City(city,locationData) {
