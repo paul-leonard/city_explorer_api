@@ -40,52 +40,54 @@ function handleLocation(request, response) {
   // run a select from the locations table to see if we have this city already stored
   const searchSQL = 'SELECT * FROM locations WHERE search_query=$1';
   const safeSearchCityValues = [city];
-  console.log(`searching the database for a matching search string of: `,city);
+  console.log(`searching the database for a matching safe search string of: `,city);
 
   // get the results
   client.query(searchSQL,safeSearchCityValues)
     .then(incomingFromSQL => {
-      console.log(`The data that was pulled from the database was: `, safeSearchCityValues);
+      console.log(`The data that was pulled from the database was: `, incomingFromSQL);
 
       //if results are good data, pass them to client
       if(incomingFromSQL.rowCount >= 1){
         console.log(`city found in database... pulling from database`);
         const chosenCityFromDB = incomingFromSQL.rows[0];
         let thisCity = new CityFromSQL(chosenCityFromDB);
-        console.log(`this city results object from database: `, thisCity);
+        console.log(`before the constructor, we have *chosenCityFromDB*: `,chosenCityFromDB);        
+        console.log(`*thisCity* results in the object created from database: `, thisCity);
         response.status(200).send(thisCity);
-      }    // tricky if/else. Morgan suggested, similar to reading last night. If true, sends response and exits the whole function. So nothing below it would be run,        meaning an else statement and block is not needed.
+      } else {
+        // tricky if/else. Morgan suggested, similar to reading last night. If true, send  response and exits the whole function. So nothing below it would be run,        meanin  an else statement and block is not needed.
       
-      // if there is no data in the DB for this city, go get the info from the API
-      console.log('did not find city in DB - going to the API')
+        // if there is no data in the DB for this city, go get the info from the API
+        console.log('did not find city in DB - going to the API')
 
-      // had put below response in to test connectivity... but it didn't work. ....actually
-      // actually... turns out it did respond with the message... but also a warning  aboutunhandled   promise rejection
-      // will get TA help tomorrow to get it all connected
-      // res.status(200).json({ message: 'ok' })
+        // had put below response in to test connectivity... but it didn't work. ....actually
+        // actually... turns out it did respond with the message... but also a warning    aboutunhandled   promise rejection
+        // will get TA help tomorrow to get it all connected
+        // res.status(200).json({ message: 'ok' })
 
-      let url = `https://us1.locationiq.com/v1/search.php`
-      const queryObject = {
-        key: process.env.GEOCODE_API_KEY,
-        city,
-        format: 'JSON',
-        limit: 1
-      }
+        let url = `https://us1.locationiq.com/v1/search.php`
+        const queryObject = {
+          key: process.env.GEOCODE_API_KEY,
+          city,
+          format: 'JSON',
+          limit: 1
+        }
 
-      superagent
-      .get(url)
-      .query(queryObject)
-        .then(incomingLocationData => {
-          let locationData = incomingLocationData.body[0];
-          const cityData = new City(city, locationData);
-          console.log(`new city object created from API results: `,cityData);
-          addToLocationDatabase(cityData);
-          response.send(cityData);
-        })
-        .catch( (error) => {
-          response.status(500).send('Sorry, something went wrong  ---- - error 602paul');
-        });
-    })
+        superagent
+        .get(url)
+        .query(queryObject)
+          .then(incomingLocationData => {
+            let locationData = incomingLocationData.body[0];
+            const cityData = new City(city, locationData);
+            console.log(`new city object created from API results: `,cityData);
+            addToLocationDatabase(cityData);
+            response.send(cityData);
+          })
+          .catch( (error) => {
+            response.status(500).send('Sorry, something went wrong  ---- - error 602paul');
+          });
+      }})
     .catch(e => {
       throw new Error(e.message)
     });
@@ -96,8 +98,8 @@ function addToLocationDatabase(cityObject) {
   //add new search_query AND its object to database
   const storeInDBsql = `INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4);`;
   const safeInputCityValues = [cityObject.search_query, cityObject.formatted_query, cityObject.latitude, cityObject.longitude];
-  console.log(`safe values for location: `, safeInputCityValues);
-  client.query(storeInDBsql, safeInputCityValues);  // the code is breaking on this line
+  console.log(`safe values for storing location in DB: `, safeInputCityValues);
+  client.query(storeInDBsql, safeInputCityValues);
   console.log(`got to line that follows the attempt to store values in the database`)
 }
 
@@ -108,21 +110,12 @@ function City(city,locationData) {
   this.longitude = locationData.lon;
 };
 
-// if data from DB is an array
-function CityFromSQL(arrayFromDB) {
-  this.search_query = arrayFromDB[1];
-  this.formatted_query = arrayFromDB[2];
-  this.latitude = arrayFromDB[3];
-  this.longitude = arrayFromDB[4];
+function CityFromSQL(object) {
+  this.search_query = object.search_query;
+  this.formatted_query = object.formatted_query;
+  this.latitude = object.latitude;
+  this.longitude = object.longitude;
 };
-
-// if data from DB is object
-// function CityFromSQL(search_query,formatted_query,latitude,longitude) {
-//   this.search_query = search_query;
-//   this.formatted_query = formatted_query;
-//   this.latitude = latitude;
-//   this.longitude = longitude;
-// };
 
 function handleWeather(request, response) {
   let lat = request.query.latitude;
