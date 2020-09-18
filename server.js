@@ -57,14 +57,10 @@ function handleLocation(request, response) {
         response.status(200).send(thisCity);
       } else {
         // tricky if/else. Morgan suggested, similar to reading last night. If true, send  response and exits the whole function. So nothing below it would be run,        meanin  an else statement and block is not needed.
+        // turns out... when i would not have the explict else... i was getting warnings about an UnhandledPromiseRejectionWarning and additionally... it would run all of the "else" code!  Is this response not enough to kick it out?
       
         // if there is no data in the DB for this city, go get the info from the API
         console.log('did not find city in DB - going to the API')
-
-        // had put below response in to test connectivity... but it didn't work. ....actually
-        // actually... turns out it did respond with the message... but also a warning    aboutunhandled   promise rejection
-        // will get TA help tomorrow to get it all connected
-        // res.status(200).json({ message: 'ok' })
 
         let url = `https://us1.locationiq.com/v1/search.php`
         const queryObject = {

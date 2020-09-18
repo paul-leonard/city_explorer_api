@@ -152,8 +152,18 @@ Actual time needed to complete: 1:30
 
 Estimate of time needed to complete: 1.5 hours
 
-Start time:  12:10
+Start time:  12:10 ; 11:30
 
-Finish time: 1:05
+Finish time: 1:05 ; 2:00
 
-Actual time needed to complete: 55 minutes so far...
+Actual time needed to complete: 3:25
+
+## Number and name of feature: Lab8 Feature 3 - deploy application including postgres DB to heroku
+
+Estimate of time needed to complete: 30 minutes
+
+Start time:  2:11
+
+Finish time: 
+
+Actual time needed to complete: 
