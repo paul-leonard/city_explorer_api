@@ -47,49 +47,28 @@ function handleLocation(request, response) {
 
   // get the results
   client.query(searchSQL,safeSearchCityValues)
-    .then(results => {
-      // if results are good, send them back
-      if (results.rowCount >= 1) {
-        // once connected, use the next line to see what SQL returns raw
-        // res.status(200).json(results.rows);
-        // for final code, run the results through the constructor to make good data
-        let thisCity = new CityFromSQL(search_query,formatted_query,latitude,longitude);
+    .then(incomingFromSQL => {
+      // once connected, use the next line to see what SQL returns raw
+      // res.status(200).json(results.rows);
+      // for final code, run the results through the constructor to make good data
+
+      //if results are good data, pass them to client
+      if(incomingFromSQL.rowCount){
+        const chosenCityFromDB = incomingFromSQL.rows[0];
+        let thisCity = new CityFromSQL(chosenCityFromDB.search_query,chosenCityFromDB.formatted_query,chosenCityFromDB.latitude,chosenCityFromDB.longitude);
+        console.log('found the city in the database');
         console.log(`this city results object: `, thisCity);
-        res.send(thisCity);
-      } else {
-      // if no results, send back not found message
-        throw new Error('No Results Found')
-
-
-
-
-
-
-
-      }
-    })
-    .catch(e => {
-      throw new Error(e.message)
-    });
-  // had put below response in to test connectivity... but it didn't work. ....actually
-  // actually... turns out it did respond with the message... but also a warning aboutunhandled promise rejection
-  // will get TA help tomorrow to get it all connected
-  // res.status(200).json({ message: 'ok' })
-
-  //and the function that has been disassembled and put in line ENDS here.
-  .then(incomingFromSQL => {
-    //if its good data, pass it to client
-    if(incomingFromSQL.rowCount){
-      const chosenCityFromDB = incomingFromSQL.rows[0];
-      console.log('found the city in the database');
-      response.status(200).send(chosenCityFromDB);
-    }
-    // tricky if/else.... write more comments/lesson
-      // if it is an error and no data, pass it to the api
+        response.status(200).send(thisCity);
+      }    // tricky if/else. Morgan suggested, similar to reading last night. If true, sends response and exits the whole function. So nothing below it would be run,        meaning an else statement and block is not needed.
+      
+      // if there is no data in the DB for this city, go get the info from the API
       console.log('did not find city in DB - going to the API')
 
-      // This version of the code changes out our long written out url for two reasons.  First, security.  By using superagent to construct the url (with .get(url) and .query  (queryObject)), superagent checks the query strings for malicious code.  Second, it makes it easier to read the url and see the search parameters.
-      // old way:  let url = `https://us1.locationiq.com/v1/search.php?key=${key}&q=${city}limit=1&format=json`;
+
+      // had put below response in to test connectivity... but it didn't work. ....actually
+      // actually... turns out it did respond with the message... but also a warning  aboutunhandled   promise rejection
+      // will get TA help tomorrow to get it all connected
+      // res.status(200).json({ message: 'ok' })
 
       let url = `https://us1.locationiq.com/v1/search.php`
       const queryObject = {
@@ -111,10 +90,10 @@ function handleLocation(request, response) {
         .catch( (error) => {
           response.status(500).send('Sorry, something went wrong');
         });
-  })
-  .catch(e => {
-    throw new Error(e.message)
-  })
+    })
+    .catch(e => {
+      throw new Error(e.message)
+    });
 }
 
 
