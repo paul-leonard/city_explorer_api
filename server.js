@@ -50,6 +50,7 @@ function handleLocation(request, response) {
 
       //if results are good data, pass them to client
       if(incomingFromSQL.rowCount){
+        console.log(`city found in database... pulling from database`);
         const chosenCityFromDB = incomingFromSQL.rows[0];
         let thisCity = new CityFromSQL(chosenCityFromDB);
         console.log('found the city in the database');
@@ -79,11 +80,12 @@ function handleLocation(request, response) {
         .then(incomingLocationData => {
           let locationData = incomingLocationData.body[0];
           const cityData = new City(city, locationData);
+          console.log(`new city object created from API results: `,cityData);
           addToLocationDatabase(cityData);
           response.send(cityData);
         })
         .catch( (error) => {
-          response.status(500).send('Sorry, something went wrong');
+          response.status(500).send('Sorry, something went wrong  ---- - error 602paul');
         });
     })
     .catch(e => {
@@ -95,9 +97,11 @@ function handleLocation(request, response) {
 function addToLocationDatabase(cityObject) {
   //add new search_query AND its object to database
   const storeInDBsql = `INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES ($1, $2, $3, $4);`;
-  const safeInputCityValues = [cityObject.city, cityObject.formatted_query, cityObject.latitude, cityObject.longitude];
+  const safeInputCityValues = [cityObject.search_query, cityObject.formatted_query, cityObject.latitude, cityObject.longitude];
   console.log(`safe values for location: `, safeInputCityValues);
-  client.query(sql, safeValues);
+  console.log(`successful to here 2063`);
+  client.query(sql, safeValues);  // the code is breaking on this line
+  console.log(`successful to here 2065`)
 }
 
 function City(city,locationData) {
