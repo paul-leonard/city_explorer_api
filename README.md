@@ -47,6 +47,8 @@ This project develops a backend information gathering, management, and aggregati
 
 **2.1.0**  09-16-2020 12:08am - Added SQL server support and table
 
+**3.0.0**  09-18-2020 2:29am - postgres SQL DB functioning to supply data to limit API calls
+
 
 ## Credits and Collaborations
 - Collaboration with Dominique Augurson
@@ -164,6 +166,6 @@ Estimate of time needed to complete: 30 minutes
 
 Start time:  2:11
 
-Finish time: 
+Finish time: 2:30pm
 
-Actual time needed to complete: 
+Actual time needed to complete: 20 minutes
